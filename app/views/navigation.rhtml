@@ -11,7 +11,6 @@ end
 <div class="navigation">
     <span class="skipNav"><a href='#navEnd'>Skip the Navigation Links</a> | </span>
 <%- if params['action'] != 'published' then -%>
-    <%= list_item 'Home Page', {:action => 'show', :id => 'HomePage'}, 'Home, Sweet Home', 'H' %> | 
     <%= list_item 'All Pages', {:action => 'list'}, 'Alphabetically sorted list of pages', 'A' %> | 
     <%= list_item 'Recently Revised', {:action =>'recently_revised'}, 'Pages sorted by when they were last changed', 'U' %> |
     <%= list_item 'Authors', {:action => 'authors'}, 'Who wrote what' %> | 

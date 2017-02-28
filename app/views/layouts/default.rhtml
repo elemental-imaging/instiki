@@ -19,11 +19,11 @@
   <%= stylesheet_link_tag 'instiki', :media => 'all'  unless @inline_style %>
   <%= stylesheet_link_tag 'syntax', :media => 'all'  unless @inline_style %>
   <style type="text/css">
-    h1#pageName, div.info, .newWikiWord a, a.existingWikiWord, .newWikiWord a:hover, [actiontype="toggle"]:hover, #TextileHelp h3 { 
+    h1#pageName, div.info, a, a:hover, [actiontype="toggle"]:hover, #TextileHelp h3 {
       color: #<%= @web ? @web.color : "393" %>; 
     }
-    a:visited.existingWikiWord {
-      color: #<%= darken(@web ? @web.color : "393") %>;
+    form#navigationSearchForm input {
+      border-bottom: 1px solid #<%= @web ? @web.color : "393" %>;
     }
     <%= Rails.root.join('public', 'stylesheets', 'instiki.css').read if @inline_style %>
     <%= Rails.root.join('public', 'stylesheets', 'syntax.css').read if @inline_style %>
@@ -32,60 +32,54 @@
   <style type="text/css"><!--/*--><![CDATA[/*><!--*/    
     <%= @web && @web.additional_style ? @web.additional_style.html_safe : '' %>
   /*]]>*/--></style>
+  <%= javascript_include_tag "jquery-1.7.2.min" %>
+  <%= javascript_include_tag "contents" %>
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tag 'page_helper' %>
+  <%= javascript_include_tag "https://craig.global.ssl.fastly.net/js/mousetrap/mousetrap.min.js?bc893" %>
   <%= csrf_meta_tag %>
   <%- if @web -%>
-   <%- if @web.markup == :markdownMML -%>
-  <script type="text/x-mathjax-config">
-  <!--//--><![CDATA[//><!--
-    MathJax.Hub.Config({
-      MathML: { useMathMLspacing: true },
-      "HTML-CSS": { scale: 90,
-                    noReflows: false,
-                    extensions: ["handle-floats.js"]
-       }
-    });
-    MathJax.Hub.Queue( function () {
-       var fos = document.getElementsByTagName('foreignObject');
-       for (var i = 0; i < fos.length; i++) {
-         MathJax.Hub.Typeset(fos[i]);
-       }
-    });
-  //--><!]]>
-  </script>
-  <script type="text/javascript">
-    if (!(Prototype.Browser.Gecko || navigator.userAgent.match(/MathPlayer/))) {
-      var s = document.createElement('script');
-      s.src = "<%= compute_public_path('MathJax.js', 'MathJax').split('?')[0] %>?config=MML_HTMLorMML-full";
-      document.querySelector('head').appendChild(s);
-    };
-  </script>
-   <%- end -%>
   	<%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_headlines'},
   	      :title => 'Atom with headlines') %>
   	<%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_content'},
   	      :title => 'Atom with full content') %>
   <%- end -%>
+
+  <script>
+    Mousetrap.bind('command+e', function(e) {
+      window.location = window.location.toString().replace('show', 'edit');
+
+      return false;
+    });
+
+    Mousetrap.bind('command+s', function(e) {
+      jQuery('input[type="submit"]').click();
+
+      return false;
+    });
+  </script>
 </head>
 
 <body xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://svg-edit.googlecode.com">
 
 <div id="Container">
 <div id="Content">
-  <h1 id="pageName">
-    <%= render(:file => 'svg_logo') if xhtml_enabled? %>
-    <%- if @page and (@page.name == 'HomePage') and %w( show published print ).include?(@action_name) -%>
-      <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
-    <%- elsif @web -%>
-      <span class="webName"><%= @web.name %></span><br />
-      <%= @title %>
-    <%- else -%>
-      <%= @title %>
-    <%- end %>
-  </h1>
+  <div class="header">
+    <h1 id="pageName">
+      <%- if @page and (@page.name == 'HomePage') and %w( show published print ).include?(@action_name) -%>
+        <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
+      <%- elsif @web -%>
+        <span class="webName">
+        </span>
+          <%= link_to @web.name, {:controller => 'wiki', :action => 'show', :id => 'HomePage'} %> |
+        <%= @title %>
+      <%- else -%>
+        <%= @title %>
+      <%- end %>
+    </h1>
 
-<%= render(:file => 'navigation') unless @web.nil? || @hide_navigation %>
+    <%= render(:file => 'navigation') unless @web.nil? || @hide_navigation %>
+  </div>
 
 <%- if flash[:info] -%>
   <div class="info"><%= escape_preserving_linefeeds flash[:info] %></div>

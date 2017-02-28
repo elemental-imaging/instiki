@@ -27,3 +27,16 @@ Ajax.Responders.register({
     }
   }
 });
+
+(function($){
+  $(document).ready(function() {
+    var contents;
+
+    $('body').prepend('<div class="toc"><div class="toc-title">Table of Contents</div></div>');
+    $('body').find('h2 + ul > li').data('gajus.contents.level', 3);
+
+    contents = gajus.Contents({ articles: $('body').find('h2, h3').get()});
+
+    $('.toc').append(contents.list());
+  });
+}(jQuery))

@@ -1,9 +1,13 @@
 body {
 background-color:#FFF;
 color:#333;
-font-family:Verdana, Arial, Helvetica, sans-serif;
+font-family:Helvetica Neue, sans-serif;
 font-size:1em;
 line-height:1.3em;
+}
+
+img {
+  max-width: 100%;
 }
 
 .skipNav {
@@ -17,22 +21,29 @@ margin:0 10px;
 text-align:center;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
 #Content {
 border-top:none;
 margin:auto;
+margin-left: 25%;
 padding:0.3em;
 text-align:left;
-width:100%;
+width:75%;
 max-width:55em;
 }
 
-a:visited {
-color:#666;
+a {
+  text-decoration: none;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 {
 color:#333;
-font-family:georgia, verdana, sans-serif;
+font-family:Helvetica Neue, sans-serif;
+font-weight:500;
 }
 
 h1 {
@@ -40,11 +51,13 @@ font-size:200%;
 }
 
 h2 {
+  margin: 0;
 font-size:173%;
 }
 
-h3 {
-font-size:144%;
+h2 > a {
+  display: block;
+  padding: 0.83em 0;
 }
 
 h4 {
@@ -56,19 +69,13 @@ font-size:100%
 }
 
 h1#pageName {
-line-height:1em;
 margin:0.2em 0 0.2em 0;
 padding:0;
-}
-
-#svg_logo {
 float:left;
-margin:.5em .25em 0 -.625em;
-width:1.5em;
-height:1.625em;
+font-size:1em;
 }
 
-a.nav,a:link.nav, a:visited.nav {
+a.nav,a:link.nav,a:visited.nav {
 background-color:#FFF;
 color:#000;
 }
@@ -117,23 +124,19 @@ display:inline;
 
 form#navigationSearchForm input {
 font-size:80%;
+border:none;
+border-bottom: 1px solid red;
 }
 
 .navigation {
 color:#555;
 font-size:90%;
 margin-top:0.3em;
-}
-
-.navigation a:hover {
-background-color:#000;
-color:#FFF;
-text-decoration:none;
+float:right;
 }
 
 .navigation a {
-color:#000;
-font-weight:bold;
+  font-weight:bold;
 }
 
 .navigation small a {
@@ -196,10 +199,6 @@ background: #eee;
 padding: 3px;
 border: 1px solid silver;
 font-size:.85em;
-}
-
-span.webName {
-font-size:.5em;
 }
 
 span.views, span.linked {
@@ -386,34 +385,12 @@ color:#666;
 font-size:80%;
 }
 
-a,li span {
-color:#000;
-}
-
-a.existingWikiWord[title]{
-//border: 1px dashed #BBB;
-}
-
-.web_protected a.existingWikiWord[title], .web_normal a.existingWikiWord[title] {
-// border: none;
-}
-
 a:hover, a.nav:hover, a:hover math {
-background-color:#000;
-color:#FFF;
+  text-decoration: underline;
 }
 
-a:hover.existingWikiWord, a:visited:hover.existingWikiWord {
-background-color:#008;
-color:#FFF;
-}
-a:hover.existingWikiWord[title] {
-background-color:#707;
-color:#FFF;
-}
-.web_protected a:hover.existingWikiWord[title], .web_normal a:hover.existingWikiWord[title] {
-background-color:#000;
-color:#FFF;
+h2:hover a:hover {
+  text-decoration: none;
 }
 
 div.errorExplanation p,div.errorExplanation li {
@@ -444,7 +421,7 @@ math { white-space: nowrap }
 .maruku-eq-number {float:right}
 .maruku-equation {text-align:center}
 .blockquotesource {margin-left:1em;}
-fieldset.search {display:inline; border:none;padding:0;margin:0;top:5px;position:relative;}
+fieldset.search {display:inline; border:none;padding:0;margin:0;top:0;position:relative;}
 span.keyboard {
  background: #CCC;
  color: #000;
@@ -523,3 +500,116 @@ span.theorem_label {font-style:normal; font-weight:bold;}
 }
 [actiontype="toggle"]:hover {text-shadow: #ccc 2px 2px 5px;}
 .maruku_toc ul { list-style: none; }
+
+/* @section toc */
+.toc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 25%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  color: #b3b3b3;
+  font-size: 12px;
+  background: #343131;
+}
+
+.toc a {
+  color: #b3b3b3;
+  text-decoration: none;
+}
+
+.toc li a:hover {
+  background-color: black;
+  cursor: pointer;
+}
+
+.toc li {
+  position: relative;
+  margin: 0;
+}
+
+.toc li a {
+  display: block;
+  padding-left: 1em;
+}
+
+.toc li a:before {
+  counter-increment: section;
+  content: counters(section, '.') '. ';
+}
+
+.toc ol {
+  line-height: 24px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: section;
+}
+
+.toc > ol > li > a {
+  position: relative;
+}
+
+.toc > ol > li > ol {
+  background-color: #4e4a4a;
+}
+
+.toc > ol > li > ol > li > a {
+  padding-left: 2em;
+}
+
+.toc-title {
+  z-index: 200;
+  background-color: #715ab1;
+  text-align: center;
+  padding: 0.809em;
+  display: block;
+  color: #fcfcfc;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 0.8em;
+}
+
+.toc ul {
+  padding-left: 10px;
+  margin: 0;
+}
+
+#wiki-body .toc li.active a {
+  background: white;
+  color: rgb(87, 81, 102);
+  transition: 0.4s;
+}
+
+#wiki-body .toc ul li ul li ul li ul li {
+  display: none;
+  transition: 0.4s;
+}
+
+#wiki-body .toc ul li ul li ul li ul li.active {
+  display: block !important;
+}
+
+#wiki-body .toc ul {
+  font-size: 22px;
+}
+
+#wiki-body .toc ul li ul  {
+  font-size: 20px;
+}
+
+#wiki-body .toc ul li ul li ul  {
+  font-size: 18px;
+}
+
+#wiki-body .toc ul li ul li ul li ul {
+  font-size: 12px;
+}
+
+.toc ul li {
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
