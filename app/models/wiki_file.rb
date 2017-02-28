@@ -5,7 +5,7 @@ class WikiFile < ActiveRecord::Base
   before_destroy :delete_content_file        
   
   validates_presence_of %w( web file_name )
-  validates_length_of :file_name, :within=>1..50
+  validates_length_of :file_name, :within=>1..255
   validates_length_of :description, :maximum=>255
 
   def self.find_by_file_name(file_name)
